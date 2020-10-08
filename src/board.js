@@ -1,80 +1,74 @@
 import { Cat } from "./cat";
 import { Prop } from "./prop";
-import { PropList } from "./propList";
 import { Canvas } from "./canvas";
 import { plantUrls } from "./propImageUrls";
-import { foodUrls, positionSetArray } from "./data";
-import { generateObstacle, generateRandomPosition } from "./util";
+import { foodUrls, positionSetArray } from "./util/data";
+import { generateRandomProps } from "./util/randomGeneration";
+import { generateObstacle } from "./util/generateObstacle";
 
 export class Board {
   constructor() {
     window.addEventListener("keydown", this.keyDownHandler, false);
     window.addEventListener("keyup", this.keyUpHandler, false);
   }
-  canvas = new Canvas();
-  cat = new Cat(32, 32);
-  wall = new Prop(32, 32, "./image/fence.png");
-  foods = []; //foods obj
-  obstacle; //obstacle key set
-
-  miss = false;
+  xframeIdx = 0;
+  yframeIdx = 0;
+  x = 0;
+  y = 0;
   rightPressed = false;
   leftPressed = false;
   upPressed = false;
   downPressed = false;
 
-  initItems(level) {
-    let foodArr = generateRandomPosition(level, foodUrls, positionSetArray);
-    this.obstacle = generateObstacle(level, foodArr);
-    this.foods = new PropList(foodArr).propList;
-  }
+  canvas = new Canvas();
+  cat = new Cat(250, 250, 32, 32, "./image/fatcat.png", this.canvas.ctx);
+  wall = new Prop(32, 32, "./image/fence.png");
+  foods = {}; //foods obj
+  obstacle; //obstacle key set
 
-  drawBoard() {
-    this.canvas.drawCanvas();
-    this.canvas.decorateCanvas(this.wall);
-    this.canvas.drawProps(this.foods);
-  }
+  miss = false;
 
-  showObstacle() {
-    this.canvas.drawCanvas();
-    this.canvas.drawText(this.level);
-    new Promise((resolve, reject) => {
-      let i = 0;
-      let clear = setInterval(() => {
-        this.canvas.drawProp();
-        if (i === 3) {
-          clearInterval(clear);
-          resolve();
-        }
-        i++;
-      });
+  initItems = (level) => {
+    this.foods = generateRandomProps(level, foodUrls, positionSetArray);
+    this.obstacle = generateObstacle(level, Object.keys(this.foods));
+  };
+
+  drawBoard = () => {
+    this.canvas.drawCanvas("yellow");
+    // this.canvas.decorateCanvas(this.wall);
+    // this.canvas.drawProps(this.foods);
+  };
+
+  showObstacle = (level, idx) => {
+    return new Promise((resolve, reject) => {
+      let obs = Array.from(this.obstacle);
+      let end = obs.length;
+
+      if (idx === end) {
+        resolve("done");
+      } else {
+        this.canvas.drawCanvas("green");
+        this.canvas.drawText(level);
+
+        this.canvas.drawProp(this.foods[obs[idx]], 220, 210).then((res) => {
+          if (res === "done") {
+            setTimeout(() => {
+              this.showObstacle(level, idx + 1);
+            }, 1000);
+          }
+        });
+      }
     });
-    // ctx.drawImage(
-    //   foods[e].food_image,
-    //   0,
-    //   0,
-    //   foods[e].width,
-    //   foods[e].height,
-    //   canvas.width / 2 - foods[e].width,
-    //   canvas.height / 2,
-    //   foods[e].width * 1.2,
-    //   foods[e].height * 1.2
-    // );
-  }
-
-  displayObstacle(level) {
-    this.drawBackground();
-    this.drawText(level);
-    this.drawProp();
-  }
+  };
 
   drawHit() {}
 
-  deleteItem(life) {
+  deleteItem = (life) => {
     let foodX;
     let foodY;
 
-    this.foods.forEach((food) => {
+    Object.keys(this.foods).forEach((key) => {
+      let food = this.foods[key];
       foodX = food.x;
       foodY = food.y;
 
@@ -89,103 +83,118 @@ export class Board {
             this.miss = true;
           }
         }
-        this.deleted.add(food.key);
+        delete this.foods[key];
       }
     });
-  }
-
-  move(prop) {
-    let x = 0;
-    let y = 0;
-    if (
-      this.rightPressed &&
-      prop.x < this.canvas.width - prop.width - this.wall.width
-    ) {
-      x += 3;
-    } else if (this.leftPressed && prop.x > this.wall.width) {
-      x -= 3;
-    } else if (this.upPressed && prop.y > this.wall.width - 9) {
-      y -= 3;
-    } else if (
-      this.downPressed &&
-      y < this.canvas.height - prop.width - this.wall.width - 5
-    ) {
-      y += 3;
-    }
-    prop.move(x, y);
-  }
-
-  isEqualSet(setOne, setTwo) {
-    if (setOne.size !== setTwo.size) return false;
-    for (var a of setOne) if (!setTwo.has(a)) return false;
-    return true;
-  }
-
-  keyUpHandler = (e) => {
-    console.log("hey");
-    if (e.keyCode == 39) {
-      rightPressed = false;
-    } else if (e.keyCode == 37) {
-      leftPressed = false;
-    } else if (e.keyCode == 38) {
-      upPressed = false;
-    } else if (e.keyCode == 40) {
-      downPressed = false;
-    }
   };
 
-  keyDownHandler = (e) => {
-    console.log("hey");
-    if (e.keyCode == 39) {
-      this.rightPressed = true;
-      if (this.xframeIdx >= 8) {
-        this.xframeIdx = 6;
-      } else {
-        this.xframeIdx += 1;
-      }
-      this.yframeIdx = 2;
-    } else if (e.keyCode == 37) {
-      this.leftPressed = true;
-      if (this.xframeIdx >= 8) {
-        this.xframeIdx = 6;
-      } else {
-        this.xframeIdx += 1;
-      }
-      this.yframeIdx = 1;
-    } else if (e.keyCode == 38) {
-      this.upPressed = true;
-      if (this.xframeIdx >= 2) {
-        this.xframeIdx = 0;
-      } else {
-        this.xframeIdx += 1;
-      }
-      this.yframeIdx = 3;
-    } else if (e.keyCode == 40) {
-      this.downPressed = true;
-      if (this.xframeIdx >= 2) {
-        this.xframeIdx = 0;
-      } else {
-        this.xframeIdx += 1;
-      }
-      this.yframeIdx = 0;
-    }
+  // animateCat() {
+  //   return new Promise(function (resolve, reject) {
+  //     const drawCat = setInterval(function () {
+  //       this.move(this.cat);
+  //       canvas.drawProp(this.cat);
+  //       this.deleteItem();
+  //       if (this.miss) {
+  //         this.drawHit();
+  //         clearInterval(drawCat);
+  //         reject();
+  //       } else if (isEqualSet(obstacle, deleted)) {
+  //         clearInterval(drawCat);
+  //         resolve();
+  //       }
+  //     }, 12);
+  //   });
+  // }
+
+  test = () => {
+    this.canvas.clear();
+    // this.drawBoard();
+    this.cat.x += 2;
+    this.cat.draw();
+    // this.canvas.drawProp(this.cat);
+    requestAnimationFrame(this.test);
+    // this.canvas.drawProp(this.cat);
+    // this.drawBoard();
+
+    // this.deleteItem(3);
+    // if (!this.miss) {
+    // }
   };
 
-  animateCat() {
-    return new Promise(function (resolve, reject) {
-      const drawCat = setInterval(function () {
-        this.move(this.cat);
-        canvas.drawProp(this.cat);
-        this.deleteItem();
-        if (this.miss) {
-          this.drawHit();
-          clearInterval(drawCat);
-          reject();
-        } else if (isEqualSet(obstacle, deleted)) {
-          clearInterval(drawCat);
-          resolve();
-        }
-      }, 12);
-    });
-  }
+  // keyUpHandler = (e) => {
+  //   console.log("hi");
+  //   if (e.keyCode == 39) {
+  //     this.rightPressed = false;
+  //   } else if (e.keyCode == 37) {
+  //     this.leftPressed = false;
+  //   } else if (e.keyCode == 38) {
+  //     this.upPressed = false;
+  //   } else if (e.keyCode == 40) {
+  //     this.downPressed = false;
+  //   }
+  // };
+
+  // keyDownHandler = (e) => {
+  //   if (e.keyCode == 39) {
+  //     this.rightPressed = true;
+  //     if (this.xframeIdx >= 8) {
+  //       this.xframeIdx = 6;
+  //     } else {
+  //       this.xframeIdx += 1;
+  //     }
+  //     this.yframeIdx = 2;
+  //   } else if (e.keyCode == 37) {
+  //     this.leftPressed = true;
+  //     if (this.xframeIdx >= 8) {
+  //       this.xframeIdx = 6;
+  //     } else {
+  //       this.xframeIdx += 1;
+  //     }
+  //     this.yframeIdx = 1;
+  //   } else if (e.keyCode == 38) {
+  //     this.upPressed = true;
+  //     if (this.xframeIdx >= 2) {
+  //       this.xframeIdx = 0;
+  //     } else {
+  //       this.xframeIdx += 1;
+  //     }
+  //     this.yframeIdx = 3;
+  //   } else if (e.keyCode == 40) {
+  //     this.downPressed = true;
+  //     if (this.xframeIdx >= 2) {
+  //       this.xframeIdx = 0;
+  //     } else {
+  //       this.xframeIdx += 1;
+  //     }
+  //     this.yframeIdx = 0;
+  //   }
+  // };
+
+  // positionChange = (prop) => {
+  //   let x = 0;
+  //   let y = 0;
+
+  //   if (
+  //     this.rightPressed &&
+  //     prop.x < this.canvas.width - prop.width - this.wall.width
+  //   ) {
+  //     x += 3;
+  //   } else if (this.leftPressed && prop.x > this.wall.width) {
+  //     x -= 3;
+  //   } else if (this.upPressed && prop.y > this.wall.width - 9) {
+  //     y -= 3;
+  //   } else if (
+  //     this.downPressed &&
+  //     y < this.canvas.height - prop.width - this.wall.width - 5
+  //   ) {
+  //     y += 3;
+  //   }
+  //   return [x, y];
+  // };
+
+  // isEqualSet = (setOne, setTwo) => {
+  //   if (setOne.size !== setTwo.size) return false;
+  //   for (var a of setOne) if (!setTwo.has(a)) return false;
+  //   return true;
+  // };
 }

@@ -7,11 +7,9 @@ export class IntroPage {
     this.aboutButton = document.getElementById("about");
     this.backButton = document.getElementById("back");
 
-    aboutButton.addEventListener("click", this.aboutButtonHandler);
-
-    startButton.addEventListener("click", this.startButtonHandler);
-
-    backButton.addEventListener("click", this.backButtonHandler);
+    this.aboutButton.addEventListener("click", this.aboutButtonHandler);
+    this.startButton.addEventListener("click", this.startButtonHandler);
+    this.backButton.addEventListener("click", this.backButtonHandler);
   }
 
   aboutButtonHandler = () => {

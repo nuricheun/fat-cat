@@ -4,7 +4,6 @@ export class Prop {
     this.y = y;
     this.width = width;
     this.height = height;
-    this.image = new Image(width, height);
-    this.image.src = imgUrl;
+    this.src = imgUrl;
   }
 }

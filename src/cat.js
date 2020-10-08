@@ -1,17 +1,34 @@
 export class Cat {
-  constructor(x, y, width, height, imageUrl) {
+  constructor(x, y, width, height, imageUrl, ctx) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
-    this.cat = new Image(width, height);
-    this.cat.src = imageUrl;
-    window.addEventListener("keydown", this.keyDownHandler, false);
-    window.addEventListener("keyup", this.keyUpHandler, false);
+    this.image = new Image();
+    this.image.addEventListener("load", () => {
+      this.draw();
+    });
+
+    this.image.src = imageUrl;
+    this.ctx = ctx;
   }
 
-  move(x, y) {
+  move = (x, y) => {
     this.x += x;
     this.y += y;
-  }
+  };
+
+  draw = () => {
+    this.ctx.drawImage(
+      this.image,
+      this.width,
+      this.height,
+      this.width,
+      this.height,
+      this.x,
+      this.y,
+      this.width * 1.2,
+      this.height * 1.2
+    );
+  };
 }
