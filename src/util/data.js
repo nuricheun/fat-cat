@@ -33,7 +33,7 @@ export const results = {
   miss: [
     "./image/cat/miss.jpeg",
     "./image/cat/missTwo.jpg",
-    "./image/cat/youlose.jpg",
+    "./image/cat/loseCat.jpeg",
   ],
   pass: [
     "./image/cat/passOne.jpeg",
@@ -41,6 +41,8 @@ export const results = {
     "./image/cat/passThree.jpeg",
     "./image/cat/passFour.png",
   ],
+  win: ["./image/cat/winner.png"],
+  lose: ["./image/cat/lostCat.jpeg"],
 };
 
 export const positionSetArray = [
