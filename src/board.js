@@ -11,8 +11,8 @@ export class Board {
     window.addEventListener("keydown", this.keyDownHandler, false);
     window.addEventListener("keyup", this.keyUpHandler, false);
   }
-  xframeIdx = 0;
-  yframeIdx = 0;
+  frameX = 0;
+  frameY = 0;
   x = 0;
   y = 0;
   rightPressed = false;
@@ -21,10 +21,18 @@ export class Board {
   downPressed = false;
 
   canvas = new Canvas();
-  cat = new Cat(250, 250, 32, 32, "./image/fatcat.png", this.canvas.ctx);
-  wall = new Prop(32, 32, "./image/fence.png");
+  cat = new Prop(
+    32,
+    32,
+    "./image/fatcat.png",
+    250,
+    250,
+    this.frameX,
+    this.frameY
+  );
+  wall = new Prop(32, 32, "./image/fence.png", 0, 0);
   foods = {}; //foods obj
-  obstacle; //obstacle key set
+  obstacle = new Set();
 
   miss = false;
 
@@ -36,7 +44,7 @@ export class Board {
   drawBoard = () => {
     this.canvas.drawCanvas("yellow");
     // this.canvas.decorateCanvas(this.wall);
-    // this.canvas.drawProps(this.foods);
+    this.canvas.drawProps(this.foods);
   };
 
   showObstacle = (level, idx) => {
@@ -88,30 +96,12 @@ export class Board {
     });
   };
 
-  // animateCat() {
-  //   return new Promise(function (resolve, reject) {
-  //     const drawCat = setInterval(function () {
-  //       this.move(this.cat);
-  //       canvas.drawProp(this.cat);
-  //       this.deleteItem();
-  //       if (this.miss) {
-  //         this.drawHit();
-  //         clearInterval(drawCat);
-  //         reject();
-  //       } else if (isEqualSet(obstacle, deleted)) {
-  //         clearInterval(drawCat);
-  //         resolve();
-  //       }
-  //     }, 12);
-  //   });
-  // }
-
   test = () => {
     this.canvas.clear();
     // this.drawBoard();
     this.cat.x += 2;
     this.cat.draw();
-    // this.canvas.drawProp(this.cat);
+
     requestAnimationFrame(this.test);
     // this.canvas.drawProp(this.cat);
     // this.drawBoard();
@@ -121,80 +111,80 @@ export class Board {
     // }
   };
 
-  // keyUpHandler = (e) => {
-  //   console.log("hi");
-  //   if (e.keyCode == 39) {
-  //     this.rightPressed = false;
-  //   } else if (e.keyCode == 37) {
-  //     this.leftPressed = false;
-  //   } else if (e.keyCode == 38) {
-  //     this.upPressed = false;
-  //   } else if (e.keyCode == 40) {
-  //     this.downPressed = false;
-  //   }
-  // };
+  keyUpHandler = (e) => {
+    console.log("hi");
+    if (e.keyCode == 39) {
+      this.rightPressed = false;
+    } else if (e.keyCode == 37) {
+      this.leftPressed = false;
+    } else if (e.keyCode == 38) {
+      this.upPressed = false;
+    } else if (e.keyCode == 40) {
+      this.downPressed = false;
+    }
+  };
 
-  // keyDownHandler = (e) => {
-  //   if (e.keyCode == 39) {
-  //     this.rightPressed = true;
-  //     if (this.xframeIdx >= 8) {
-  //       this.xframeIdx = 6;
-  //     } else {
-  //       this.xframeIdx += 1;
-  //     }
-  //     this.yframeIdx = 2;
-  //   } else if (e.keyCode == 37) {
-  //     this.leftPressed = true;
-  //     if (this.xframeIdx >= 8) {
-  //       this.xframeIdx = 6;
-  //     } else {
-  //       this.xframeIdx += 1;
-  //     }
-  //     this.yframeIdx = 1;
-  //   } else if (e.keyCode == 38) {
-  //     this.upPressed = true;
-  //     if (this.xframeIdx >= 2) {
-  //       this.xframeIdx = 0;
-  //     } else {
-  //       this.xframeIdx += 1;
-  //     }
-  //     this.yframeIdx = 3;
-  //   } else if (e.keyCode == 40) {
-  //     this.downPressed = true;
-  //     if (this.xframeIdx >= 2) {
-  //       this.xframeIdx = 0;
-  //     } else {
-  //       this.xframeIdx += 1;
-  //     }
-  //     this.yframeIdx = 0;
-  //   }
-  // };
+  keyDownHandler = (e) => {
+    if (e.keyCode == 39) {
+      this.rightPressed = true;
+      if (this.xframeIdx >= 8) {
+        this.xframeIdx = 6;
+      } else {
+        this.xframeIdx += 1;
+      }
+      this.yframeIdx = 2;
+    } else if (e.keyCode == 37) {
+      this.leftPressed = true;
+      if (this.xframeIdx >= 8) {
+        this.xframeIdx = 6;
+      } else {
+        this.xframeIdx += 1;
+      }
+      this.yframeIdx = 1;
+    } else if (e.keyCode == 38) {
+      this.upPressed = true;
+      if (this.xframeIdx >= 2) {
+        this.xframeIdx = 0;
+      } else {
+        this.xframeIdx += 1;
+      }
+      this.yframeIdx = 3;
+    } else if (e.keyCode == 40) {
+      this.downPressed = true;
+      if (this.xframeIdx >= 2) {
+        this.xframeIdx = 0;
+      } else {
+        this.xframeIdx += 1;
+      }
+      this.yframeIdx = 0;
+    }
+  };
 
-  // positionChange = (prop) => {
-  //   let x = 0;
-  //   let y = 0;
+  positionChange = (prop) => {
+    let x = 0;
+    let y = 0;
 
-  //   if (
-  //     this.rightPressed &&
-  //     prop.x < this.canvas.width - prop.width - this.wall.width
-  //   ) {
-  //     x += 3;
-  //   } else if (this.leftPressed && prop.x > this.wall.width) {
-  //     x -= 3;
-  //   } else if (this.upPressed && prop.y > this.wall.width - 9) {
-  //     y -= 3;
-  //   } else if (
-  //     this.downPressed &&
-  //     y < this.canvas.height - prop.width - this.wall.width - 5
-  //   ) {
-  //     y += 3;
-  //   }
-  //   return [x, y];
-  // };
+    if (
+      this.rightPressed &&
+      prop.x < this.canvas.width - prop.width - this.wall.width
+    ) {
+      x += 3;
+    } else if (this.leftPressed && prop.x > this.wall.width) {
+      x -= 3;
+    } else if (this.upPressed && prop.y > this.wall.width - 9) {
+      y -= 3;
+    } else if (
+      this.downPressed &&
+      y < this.canvas.height - prop.width - this.wall.width - 5
+    ) {
+      y += 3;
+    }
+    return [x, y];
+  };
 
-  // isEqualSet = (setOne, setTwo) => {
-  //   if (setOne.size !== setTwo.size) return false;
-  //   for (var a of setOne) if (!setTwo.has(a)) return false;
-  //   return true;
-  // };
+  isEqualSet = (setOne, setTwo) => {
+    if (setOne.size !== setTwo.size) return false;
+    for (var a of setOne) if (!setTwo.has(a)) return false;
+    return true;
+  };
 }

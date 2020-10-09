@@ -1,5 +1,5 @@
 export class Cat {
-  constructor(x, y, width, height, imageUrl, ctx) {
+  constructor(x, y, width, height, imageUrl) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -8,9 +8,8 @@ export class Cat {
     this.image.addEventListener("load", () => {
       this.draw();
     });
-
     this.image.src = imageUrl;
-    this.ctx = ctx;
+    this.ctx = document.getElementById("myCanvas").getContext("2d");
   }
 
   move = (x, y) => {
