@@ -6,12 +6,6 @@
   font-family: "Press Start 2P", cursive;
   font-size: 12px;
 }
-.up,
-.down,
-.right,
-.left {
-  background: url("./src/img/fatcat.png") no-repeat;
-}
 
 .up {
   width: 32px;

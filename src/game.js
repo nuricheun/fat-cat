@@ -6,7 +6,7 @@ export class Game {
   board = new Board();
   obstacles = new Set();
 
-  lifeLeft = 3;
+  tries = 3;
   currentLevel = 1;
   currentScore = 0;
   level = 1;
@@ -17,11 +17,22 @@ export class Game {
   pass = false;
 
   play = () => {
-    if (this.lifeLeft > 0) {
-      this.board.initItems(3);
-      // this.board.showObstacle(this.level, 0).then((res) => console.log(res));
-      // this.board.drawBoard();
-      this.board.test();
+    if (this.tries <= 0) {
+      this.board.drawLose();
+      return;
+    }else if(this.level === 4){
+      return 
     }
+
+    this.board
+      .initItems(this.level)
+      .then((res) => this.board.showObstacle(this.level))
+      .then((res) => this.board.animate())
+      .then((res) => this.board.gameResult())
+      .then((res) => {
+        this.tries += res.miss;
+        this.level += res.miss + 1;
+        this.play();
+      });
   };
 }

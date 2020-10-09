@@ -6,6 +6,7 @@ export class IntroPage {
     this.startButton = document.getElementById("start");
     this.aboutButton = document.getElementById("about");
     this.backButton = document.getElementById("back");
+    main.style.display = "flex";
 
     this.aboutButton.addEventListener("click", this.aboutButtonHandler);
     this.startButton.addEventListener("click", this.startButtonHandler);
@@ -29,5 +30,3 @@ export class IntroPage {
     this.gameIntro.style.display = "";
   };
 }
-
-// main.style.display = "flex";

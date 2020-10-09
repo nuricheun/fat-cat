@@ -1,3 +1,5 @@
+import { Prop } from "../prop";
+
 /**
  *
  * @param {*} currentLevel
@@ -6,11 +8,12 @@
  * randomly choose obstacles out of the keys of chosen food object
  */
 export function generateObstacle(currentLevel, foodKeys) {
-  let obstacleSet = new Set();
-  while (obstacleSet.size < currentLevel) {
-    obstacleSet.add(foodKeys[Math.floor(Math.random() * foodKeys.length)]);
+  let obstacleKeys = new Set();
+
+  while (obstacleKeys.size < currentLevel) {
+    let randomKey = Math.floor(Math.random() * foodKeys.length);
+    obstacleKeys.add(foodKeys[randomKey]);
   }
-  
-  console.log(obstacleSet);
-  return obstacleSet;
+  console.log(obstacleKeys);
+  return obstacleKeys;
 }

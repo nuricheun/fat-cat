@@ -24,13 +24,12 @@ export function generateRandomProps(currentLevel, imageUrls, posArraySet) {
   let posArr = Array.from(randomPositionSet);
 
   for (let i = 0; i < imgArr.length; i++) {
-    console.log(imgArr[i]);
     result[i] = new Prop(
       32,
       32,
       imageUrls[imgArr[i]],
-      positionArray[posArr[i]][0],
-      positionArray[posArr[i]][1]
+      250 + positionArray[posArr[i]][0],
+      250 + positionArray[posArr[i]][1]
     );
   }
 

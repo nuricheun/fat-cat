@@ -29,6 +29,20 @@ export const foodUrls = [
   "./image/food/sweet_potato.png",
 ];
 
+export const results = {
+  miss: [
+    "./image/cat/miss.jpeg",
+    "./image/cat/missTwo.jpg",
+    "./image/cat/youlose.jpg",
+  ],
+  pass: [
+    "./image/cat/passOne.jpeg",
+    "./image/cat/passTwo.jpeg",
+    "./image/cat/passThree.jpeg",
+    "./image/cat/passFour.png",
+  ],
+};
+
 export const positionSetArray = [
   [
     [-28, -25],
