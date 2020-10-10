@@ -1,8 +1,7 @@
 import "./css/main.css";
 
-import { Game } from "./game";
+import { IntroPage } from "./introPage";
 
 window.onload = (e) => {
-  const game = new Game();
-  game.play();
+  const introPage = new IntroPage();
 };

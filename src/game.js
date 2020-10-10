@@ -1,8 +1,6 @@
 import { Board } from "./board";
-// import { IntroPage } from "./introPage";
 
 export class Game {
-  // introPage = new IntroPage();
   board = new Board();
   obstacles = new Set();
 
@@ -14,7 +12,8 @@ export class Game {
     if (this.tries <= 0) {
       this.board.drawGameResult(this.tries ? "win" : "lose");
       return;
-    } else if (this.level === 4) {
+    } else if (this.round === 5) {
+      this.introPage.win.style.display = flex;
       return;
     }
 

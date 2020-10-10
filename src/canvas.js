@@ -3,6 +3,7 @@ export class Canvas {
   ctx = this.canvas.getContext("2d");
   width = this.canvas.width;
   height = this.canvas.height;
+  
 
   drawCanvas = (color) => {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
