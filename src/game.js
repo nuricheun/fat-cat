@@ -1,8 +1,8 @@
 import { Board } from "./board";
-import { IntroPage } from "./introPage";
+// import { IntroPage } from "./introPage";
 
 export class Game {
-  introPage = new IntroPage();
+  // introPage = new IntroPage();
   board = new Board();
   obstacles = new Set();
 
@@ -20,8 +20,8 @@ export class Game {
     if (this.tries <= 0) {
       this.board.drawLose();
       return;
-    }else if(this.level === 4){
-      return 
+    } else if (this.level === 4) {
+      return;
     }
 
     this.board

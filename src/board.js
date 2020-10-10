@@ -4,7 +4,7 @@ import { plantUrls } from "./propImageUrls";
 import { foodUrls, positionSetArray } from "./util/data";
 import { generateRandomProps } from "./util/randomGeneration";
 import { generateObstacle } from "./util/generateObstacle";
-import { generateResult } from "./util/generateResult";
+import { generateResultProps } from "./util/generateResult";
 
 export class Board {
   constructor() {
@@ -24,8 +24,8 @@ export class Board {
   cat;
   wall = new Prop(32, 32, "./image/fence.png", 0, 0);
 
-  resultCat = generateResult();
-  foods = {}; //foods obj
+  resultCat = generateResultProps();
+  foods = {};
   obstacle = new Set();
 
   miss = false;

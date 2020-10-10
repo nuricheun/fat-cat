@@ -29,7 +29,7 @@ export const foodUrls = [
   "./image/food/sweet_potato.png",
 ];
 
-export const results = {
+export const gameResultImgUrls = {
   miss: [
     "./image/cat/miss.jpeg",
     "./image/cat/missTwo.jpg",
