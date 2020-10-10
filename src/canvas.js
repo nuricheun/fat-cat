@@ -57,20 +57,20 @@ export class Canvas {
 
   drawText = (level, color = "#fff") => {
     this.ctx.fillStyle = color;
-    this.ctx.font = "30px Helvetica, sans";
+    this.ctx.font = "30px Lalezar, cursive";
     this.ctx.textAlign = "center";
-    this.ctx.fillText(`* Level ${level} *`, this.canvas.width / 2, 110);
-    this.ctx.fillText(`Do not eat`, this.canvas.width / 2, 150);
+    this.ctx.fillText(`Round ${level}`, this.canvas.width / 2, 110);
+    this.ctx.fillText(`YOU CAN EAT`, this.canvas.width / 2, 150);
   };
 
   drawMissText = (missLeft, color = "#fff") => {
     this.ctx.fillStyle = color;
-    this.ctx.font = "30px Helvetica, sans";
+    this.ctx.font = "30px Lalezar, cursive";
     this.ctx.textAlign = "center";
 
     this.ctx.fillText("Oops", this.canvas.width / 2, 110);
     this.ctx.fillText(`* ${missLeft} Left*`, this.canvas.width / 2, 110);
-    this.ctx.fillText(`Do not eat`, this.canvas.width / 2, 150);
+    this.ctx.fillText(`YOU CAN EAT`, this.canvas.width / 2, 150);
   };
 
   // drawPlants(propList) {

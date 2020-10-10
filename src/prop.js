@@ -41,10 +41,10 @@ export class Prop {
       this.frameY,
       this.width,
       this.height,
-      this.canvas.width / 2,
+      this.canvas.width / 2 - 20,
       this.canvas.height / 2,
-      this.width,
-      this.height
+      this.width * 1.2,
+      this.height * 1.2
     );
   };
 

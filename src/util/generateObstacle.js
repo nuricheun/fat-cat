@@ -14,6 +14,5 @@ export function generateObstacle(currentLevel, foodKeys) {
     let randomKey = Math.floor(Math.random() * foodKeys.length);
     obstacleKeys.add(foodKeys[randomKey]);
   }
-  console.log(obstacleKeys);
   return obstacleKeys;
 }

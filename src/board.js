@@ -1,7 +1,7 @@
 import { Prop } from "./prop";
 import { Canvas } from "./canvas";
 import { plantUrls } from "./propImageUrls";
-import { foodUrls, positionSetArray } from "./util/data";
+import { foodUrls } from "./util/data";
 import { generateRandomProps } from "./util/randomGeneration";
 import { generateObstacle } from "./util/generateObstacle";
 import { generateResultProps } from "./util/generateResult";
@@ -20,9 +20,10 @@ export class Board {
   leftPressed = false;
   upPressed = false;
   downPressed = false;
+  spacePressed = false;
 
   cat;
-  wall = new Prop(32, 32, "./image/fence.png", 0, 0);
+  background = new Prop(0, 0, "./image/cat/pantry.png", 0, 0);
 
   resultCat = generateResultProps();
   foods = {};
@@ -39,22 +40,38 @@ export class Board {
         32,
         32,
         "./image/fatcat.png",
-        this.canvas.width / 2,
-        this.canvas.width / 2,
+        63,
+        335,
         this.frameX,
         this.frameY
       );
-      this.foods = generateRandomProps(level, foodUrls, positionSetArray);
-      this.obstacle = generateObstacle(level, Object.keys(this.foods));
+      this.foods = generateRandomProps(level, foodUrls);
+      this.obstacle = generateObstacle(level + 2, Object.keys(this.foods));
 
       resolve(1);
     });
   };
 
   drawBoard = () => {
-    this.canvas.drawCanvas("yellow");
-    // this.canvas.decorateCanvas(this.wall);
+    // this.canvas.drawCanvas("yellow");
     this.canvas.drawProps(this.foods);
+  };
+
+  beforeGameStart = (level) => {
+    return new Promise((resolve, reject) => {
+      let start = Date.now();
+      const backgroundLoop = () => {
+        this.canvas.drawCanvas("green");
+        this.canvas.drawText(level);
+
+        if (Date.now() - start < 1200) {
+          requestAnimationFrame(backgroundLoop);
+        } else {
+          resolve();
+        }
+      };
+      backgroundLoop();
+    });
   };
 
   showObstacle = (level) => {
@@ -64,12 +81,12 @@ export class Board {
       let end = keys.length;
       let start = Date.now();
       const obstacleLoop = () => {
-        // console.log(idx);
+        this.canvas.clear();
         this.canvas.drawCanvas("green");
         this.canvas.drawText(level);
         this.foods[keys[idx]].drawObs();
 
-        if (idx < end && Date.now() - start < 1200) {
+        if (idx < end && Date.now() - start < 800) {
           requestAnimationFrame(obstacleLoop);
         } else if (idx < end - 1) {
           idx++;
@@ -83,7 +100,7 @@ export class Board {
     });
   };
 
-  gameResult = () => {
+  roundResult = () => {
     return new Promise((resolve, reject) => {
       let render;
 
@@ -99,7 +116,7 @@ export class Board {
         this.canvas.drawMissText(this.miss);
 
         this.resultCat[render][0].draw();
-        if (Date.now() - start < 3000) {
+        if (Date.now() - start < 1500) {
           requestAnimationFrame(loop);
         } else {
           resolve({ miss: render === "miss" ? -1 : 0 });
@@ -109,18 +126,10 @@ export class Board {
     });
   };
 
-  drawLose = () => {
+  drawGameResult = (result) => {
     this.canvas.clear();
     this.canvas.drawCanvas("white");
-    this.canvas.drawMissText(this.miss);
-    this.resultCat.miss[2].draw();
-  };
-
-  drawWin = () => {
-    this.canvas.clear();
-    this.canvas.drawCanvas("white");
-    this.canvas.drawMissText(this.miss);
-    this.resultCat.miss[2].draw();
+    this.resultCat[result][0].draw();
   };
 
   deleteItem = () => {
@@ -135,12 +144,17 @@ export class Board {
         foodX - 20 <= this.cat.x + 3 &&
         foodX + food.width >= this.cat.x + this.cat.width - 3 &&
         foodY - 20 <= this.cat.y + 3 &&
-        foodY + food.height >= this.cat.y + this.cat.height - 3
+        foodY + food.height >= this.cat.y + this.cat.height - 3 &&
+        this.spacePressed
       ) {
+        console.log(this.obstacle, key);
         if (this.obstacle.has(key)) {
+          delete this.foods[key];
+          this.obstacle.delete(key);
+          this.spacePressed = false;
+        } else {
           this.miss = true;
         }
-        delete this.foods[key];
       }
     }
   };
@@ -149,10 +163,12 @@ export class Board {
     return new Promise((resolve, reject) => {
       const animateLoop = () => {
         this.canvas.clear();
+        this.background.draw();
         this.drawBoard();
         this.positionChange(this.cat);
-        this.deleteItem(3);
-        this.isEqual(this.foods, this.obstacle);
+        this.spritePositionUpdate();
+        this.deleteItem();
+        this.isEqual(this.obstacle);
         this.cat.draw();
         if (!this.miss && !this.pass) {
           requestAnimationFrame(animateLoop);
@@ -165,78 +181,92 @@ export class Board {
   };
 
   keyUpHandler = (e) => {
-    if (e.keyCode == 39) {
+    if (e.keyCode === 39) {
       this.rightPressed = false;
-    } else if (e.keyCode == 37) {
+    } else if (e.keyCode === 37) {
       this.leftPressed = false;
-    } else if (e.keyCode == 38) {
+    } else if (e.keyCode === 38) {
       this.upPressed = false;
-    } else if (e.keyCode == 40) {
+    } else if (e.keyCode === 40) {
       this.downPressed = false;
+    } else if (e.keyCode === 32) {
+      this.spacePressed = false;
     }
   };
 
   keyDownHandler = (e) => {
-    if (e.keyCode == 39) {
+    let y = 0;
+    if (e.keyCode === 39) {
       this.rightPressed = true;
-      if (this.frameX >= 8) {
-        this.frameX = 6;
-      } else {
-        this.frameX += 1;
-      }
-      this.frameY = 2;
-    } else if (e.keyCode == 37) {
+    } else if (e.keyCode === 37) {
       this.leftPressed = true;
-      if (this.frameX >= 8) {
-        this.frameX = 6;
-      } else {
-        this.frameX += 1;
-      }
-      this.frameY = 1;
-    } else if (e.keyCode == 38) {
+    } else if (e.keyCode === 38) {
       this.upPressed = true;
-      if (this.frameX >= 2) {
-        this.frameX = 0;
-      } else {
-        this.frameX += 1;
-      }
-      this.frameY = 3;
-    } else if (e.keyCode == 40) {
+      y -= 74;
+    } else if (e.keyCode === 40) {
       this.downPressed = true;
-      if (this.frameX >= 2) {
-        this.frameX = 0;
-      } else {
-        this.frameX += 1;
-      }
-      this.frameY = 0;
+
+      y += 74;
+    } else if (e.keyCode === 32) {
+      this.spacePressed = true;
     }
-    this.cat.changeFrame(this.frameX, this.frameY);
+    console.log(this.cat.y);
+    this.cat.move(0, y);
   };
 
   positionChange = (prop) => {
     let x = 0;
-    let y = 0;
-    if (
-      this.rightPressed &&
-      prop.x < this.canvas.width - prop.width - this.wall.width
-    ) {
-      x += 2;
-    } else if (this.leftPressed && prop.x > this.wall.width) {
-      x -= 2;
-    } else if (this.upPressed && prop.y > this.wall.width - 9) {
-      y -= 2;
-    } else if (
-      this.downPressed &&
-      y < this.canvas.height - prop.width - this.wall.width - 5
-    ) {
-      y += 2;
+    // let y = 0;
+
+    if (this.rightPressed && prop.x < this.canvas.width - prop.width) {
+      x += 3;
+    } else if (this.leftPressed && prop.x > 0) {
+      x -= 3;
     }
-    prop.move(x, y);
+    // else if (this.upPressed && prop.y > this.wall.width - 9) {
+    //   y -= 3;
+    // } else if (
+    //   this.downPressed &&
+    //   y < this.canvas.height - prop.width - this.wall.width - 5
+    // ) {
+    //   y += 3;
+    // }
+
+    prop.move(x, 0);
   };
 
-  isEqual = (obj, set) => {
-    if (Object.keys(obj).length !== set.size) return;
-    for (var a in obj) if (!set.has(a)) return;
-    this.pass = true;
+  spritePositionUpdate = () => {
+    if (this.rightPressed) {
+      if (this.frameX >= 8) {
+        this.frameX = 6;
+      } else {
+        this.frameX += 1;
+      }
+    } else if (this.leftPressed) {
+      if (this.frameX >= 8) {
+        this.frameX = 6;
+      } else {
+        this.frameX += 1;
+      }
+    } else if (this.upPressed) {
+      if (this.frameX >= 2) {
+        this.frameX = 0;
+      } else {
+        this.frameX += 1;
+      }
+    } else if (this.downPressed) {
+      if (this.frameX >= 2) {
+        this.frameX = 0;
+      } else {
+        this.frameX += 1;
+      }
+    }
+    this.cat.changeFrame(this.frameX, 0);
+  };
+
+  isEqual = (obstacleSet) => {
+    if (obstacleSet.size === 0) {
+      this.pass = true;
+    }
   };
 }

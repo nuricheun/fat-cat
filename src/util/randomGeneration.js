@@ -1,13 +1,32 @@
 import { Prop } from "../prop";
 
-export function generateRandomProps(currentLevel, imageUrls, posArraySet) {
+const positionArrGenerator = (
+  firstX = 63,
+  firstY = 45,
+  height = 72,
+  width = 46,
+  pantryLevel = 5
+) => {
+  let result = [];
+
+  for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 6; j++) {
+      if ((i === 4 && j === 0) || (i === 4 && j === 1)) continue;
+      result.push([firstX + width * j, firstY + height * i]);
+    }
+  }
+
+  console.log(result);
+  return result;
+};
+
+export function generateRandomProps(currentLevel, imageUrls) {
+  const positionArray = positionArrGenerator();
   let idx = 0;
 
-  let positionArray =
-    posArraySet[Math.floor(Math.random() * posArraySet.length)];
   let randomImageUrls = new Set();
   let randomPositionSet = new Set();
-  let elementCount = currentLevel < 4 ? 8 : elementCount + 6;
+  let elementCount = currentLevel + 12;
   let result = {};
 
   while (randomImageUrls.size < elementCount) {
@@ -28,8 +47,8 @@ export function generateRandomProps(currentLevel, imageUrls, posArraySet) {
       32,
       32,
       imageUrls[imgArr[i]],
-      250 + positionArray[posArr[i]][0],
-      250 + positionArray[posArr[i]][1]
+      positionArray[posArr[i]][0],
+      positionArray[posArr[i]][1]
     );
   }
 
