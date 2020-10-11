@@ -32,7 +32,7 @@ export class Board {
   miss = false;
   pass = false;
 
-  initItems = (level) => {
+  initItems = (round) => {
     return new Promise((resolve, reject) => {
       this.miss = false;
       this.pass = false;
@@ -45,8 +45,8 @@ export class Board {
         this.frameX,
         this.frameY
       );
-      this.foods = generateRandomProps(level, foodUrls);
-      this.obstacle = generateObstacle(level + 2, Object.keys(this.foods));
+      this.foods = generateRandomProps(round, foodUrls);
+      this.obstacle = generateObstacle(round + 2, Object.keys(this.foods));
 
       resolve(1);
     });
@@ -57,12 +57,16 @@ export class Board {
     this.canvas.drawProps(this.foods);
   };
 
-  beforeGameStart = (level) => {
+  gameOver = () => {
+    this.canvas.clear();
+  };
+
+  beforeGameStart = (round) => {
     return new Promise((resolve, reject) => {
       let start = Date.now();
       const backgroundLoop = () => {
         this.canvas.drawCanvas("green");
-        this.canvas.drawText(level);
+        this.canvas.drawText(round);
 
         if (Date.now() - start < 1200) {
           requestAnimationFrame(backgroundLoop);
@@ -74,7 +78,7 @@ export class Board {
     });
   };
 
-  showObstacle = (level) => {
+  showObstacle = (round) => {
     return new Promise((resolve, reject) => {
       let idx = 0;
       let keys = Array.from(this.obstacle);
@@ -83,7 +87,7 @@ export class Board {
       const obstacleLoop = () => {
         this.canvas.clear();
         this.canvas.drawCanvas("green");
-        this.canvas.drawText(level);
+        this.canvas.drawText(round);
         this.foods[keys[idx]].drawObs();
 
         if (idx < end && Date.now() - start < 800) {
@@ -147,7 +151,6 @@ export class Board {
         foodY + food.height >= this.cat.y + this.cat.height - 3 &&
         this.spacePressed
       ) {
-        console.log(this.obstacle, key);
         if (this.obstacle.has(key)) {
           delete this.foods[key];
           this.obstacle.delete(key);
@@ -210,7 +213,7 @@ export class Board {
     } else if (e.keyCode === 32) {
       this.spacePressed = true;
     }
-    console.log(this.cat.y);
+
     this.cat.move(0, y);
   };
 

@@ -16,7 +16,6 @@ const positionArrGenerator = (
     }
   }
 
-  console.log(result);
   return result;
 };
 
