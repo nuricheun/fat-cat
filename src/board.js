@@ -53,7 +53,6 @@ export class Board {
   };
 
   drawBoard = () => {
-    // this.canvas.drawCanvas("yellow");
     this.canvas.drawProps(this.foods);
   };
 
@@ -61,12 +60,13 @@ export class Board {
     this.canvas.clear();
   };
 
-  beforeGameStart = (round) => {
+  beforeGameStart = (round, tries) => {
     return new Promise((resolve, reject) => {
       let start = Date.now();
       const backgroundLoop = () => {
         this.canvas.drawCanvas("green");
         this.canvas.drawText(round);
+        this.canvas.drawLeftTriesText(tries);
 
         if (Date.now() - start < 1200) {
           requestAnimationFrame(backgroundLoop);
@@ -78,7 +78,7 @@ export class Board {
     });
   };
 
-  showObstacle = (round) => {
+  showObstacle = (round, tries) => {
     return new Promise((resolve, reject) => {
       let idx = 0;
       let keys = Array.from(this.obstacle);
@@ -88,6 +88,7 @@ export class Board {
         this.canvas.clear();
         this.canvas.drawCanvas("green");
         this.canvas.drawText(round);
+        this.canvas.drawLeftTriesText(tries);
         this.foods[keys[idx]].drawObs();
 
         if (idx < end && Date.now() - start < 800) {

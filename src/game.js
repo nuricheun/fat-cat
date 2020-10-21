@@ -24,13 +24,13 @@ export class Game {
 
     this.board
       .initItems(this.round)
-      .then((res) => this.board.beforeGameStart(this.round))
-      .then((res) => this.board.showObstacle(this.round))
+      .then((res) => this.board.beforeGameStart(this.round, this.tries))
+      .then((res) => this.board.showObstacle(this.round, this.tries))
       .then((res) => this.board.animate())
       .then((res) => this.board.roundResult())
       .then((res) => {
         this.tries += res.miss;
-        this.level += res.miss + 1;
+        this.round += res.miss + 1;
         this.play();
       });
   };

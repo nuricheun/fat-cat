@@ -3,7 +3,6 @@ export class Canvas {
   ctx = this.canvas.getContext("2d");
   width = this.canvas.width;
   height = this.canvas.height;
-  
 
   drawCanvas = (color) => {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -58,15 +57,22 @@ export class Canvas {
 
   drawText = (level, color = "#fff") => {
     this.ctx.fillStyle = color;
-    this.ctx.font = "30px Lalezar, cursive";
+    this.ctx.font = "30px Lalezar";
     this.ctx.textAlign = "center";
     this.ctx.fillText(`Round ${level}`, this.canvas.width / 2, 110);
     this.ctx.fillText(`YOU CAN EAT`, this.canvas.width / 2, 150);
   };
 
+  drawLeftTriesText = (tries, color = "#fff") => {
+    this.ctx.fillStyle = color;
+    this.ctx.font = "28px Lalezar";
+    this.ctx.textAlign = "center";
+    this.ctx.fillText(`LIFE ${tries}`, this.canvas.width / 2 + 120, 50);
+  };
+
   drawMissText = (missLeft, color = "#fff") => {
     this.ctx.fillStyle = color;
-    this.ctx.font = "30px Lalezar, cursive";
+    this.ctx.font = "30px Lalezar";
     this.ctx.textAlign = "center";
 
     this.ctx.fillText("Oops", this.canvas.width / 2, 110);

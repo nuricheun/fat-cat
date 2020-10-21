@@ -1,11 +1,16 @@
+body {
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 200px;
+}
+
 .game-info {
   width: 500px;
   height: 500px;
   margin: 0 auto;
   align-items: center;
 
-  font-family: "Lalezar cursive";
-  font-size: 30px;
+  font-family: "Lalezar";
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -46,15 +51,10 @@
   width: 100%;
 }
 
-#fatcatintro {
-  font-family: "Press Start 2P", cursive;
-}
-
 .exp {
   cursor: pointer;
   margin-top: 8px;
   font-size: 13px;
-  font-family: "Press Start 2P", cursive;
 }
 
 .exp:hover {
@@ -73,11 +73,9 @@
 
 .title {
   margin: 0 auto;
-  /* width: 100%; */
-  font-size: 17px;
+
+  font-size: 30px;
   margin-bottom: 10px;
-  /* display: flex; */
-  /* align-items: center; */
 }
 
 #intro-div {
@@ -94,5 +92,5 @@
 
 #win {
   display: flex;
-  /* background-image: url("../image/cat/lose.png"); */
+  background-image: url("./lose.png");
 }
