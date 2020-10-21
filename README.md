@@ -1,10 +1,6 @@
-# fat-cat
-
-# FATCAT - In Progress
+# FATCAT
 
 An interactive game which tests users’ short-term memory… also there’s a cat!
-
-![](./image/fatcat.gif)
 
 # Technologies
 
