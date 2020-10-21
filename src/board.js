@@ -202,6 +202,7 @@ export class Board {
     } else if (e.keyCode === 38) {
       this.upPressed = true;
       y -= 74;
+      console.log(y);
     } else if (e.keyCode === 40) {
       this.downPressed = true;
 
