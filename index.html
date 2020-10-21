@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAT CAT</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="intro-div">
+      <div id="game-intro" class="game-info">
+        <div id="fatcatintro" class="title">
+          <img class="cat-logo" src="./image/cat/catlogo.png" />FAT CAT<img
+            class="cat-logo"
+            src="./image/cat/catlogo.png"
+          />
+        </div>
+
+        <div id="about" class="exp">About</div>
+        <div id="start" class="exp">Start</div>
+      </div>
+      <div id="about-page" class="game-info">
+        <div id="fatcatintro" class="title">
+          <img class="cat-logo" src="./image/cat/catlogo.png" />About<img
+            class="cat-logo"
+            src="./image/cat/catlogo.png"
+          />
+        </div>
+        <div>Hello there, Sneaky cat</div>
+        <div>Eat only what you can!</div>
+        <div>And be a nice happy cat :3</div>
+        <div id="back" class="exp">Back</div>
+      </div>
+      <div id="game-over" class="game-info">
+        <div id="result-msg" class="exp"></div>
+        <div id="back-to-main" class="goback">Go back</div>
+      </div>
+      <div id="win" class="game-info">
+        <div id="next-level" class="gonext">Go to next level</div>
+      </div>
+      <div id="main">
+        <canvas id="myCanvas" width="380" height="380"></canvas>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="../dist/bundle.js"></script>
+</html>
