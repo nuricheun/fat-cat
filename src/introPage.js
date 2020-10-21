@@ -16,7 +16,7 @@ export class IntroPage {
     this.backToMainButton = document.getElementById("back-to-main");
     this.nextLevelButton = document.getElementById("next-level");
 
-    main.style.display = "flex";
+    this.main.style.display = "flex";
     this.gameStart = false;
     this.gameover.style.backgroundImage = "url('./image/cat/lose.png')";
     this.win.style.backgroundImage = "url('./image/cat/winner.png')";
