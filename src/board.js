@@ -1,6 +1,5 @@
 import { Prop } from "./prop";
 import { Canvas } from "./canvas";
-import { plantUrls } from "./propImageUrls";
 import { foodUrls } from "./util/data";
 import { generateRandomProps } from "./util/randomGeneration";
 import { generateObstacle } from "./util/generateObstacle";
@@ -60,13 +59,14 @@ export class Board {
     this.canvas.clear();
   };
 
-  beforeGameStart = (round, tries) => {
+  beforeGameStart = (round, tries, level) => {
     return new Promise((resolve, reject) => {
       let start = Date.now();
       const backgroundLoop = () => {
         this.canvas.drawCanvas("green");
         this.canvas.drawText(round);
         this.canvas.drawLeftTriesText(tries);
+        this.canvas.drawCurrentLevel(level);
 
         if (Date.now() - start < 1200) {
           requestAnimationFrame(backgroundLoop);
@@ -78,7 +78,7 @@ export class Board {
     });
   };
 
-  showObstacle = (round, tries) => {
+  showObstacle = (round, tries, level) => {
     return new Promise((resolve, reject) => {
       let idx = 0;
       let keys = Array.from(this.obstacle);
@@ -89,9 +89,10 @@ export class Board {
         this.canvas.drawCanvas("green");
         this.canvas.drawText(round);
         this.canvas.drawLeftTriesText(tries);
+        this.canvas.drawCurrentLevel(level);
         this.foods[keys[idx]].drawObs();
 
-        if (idx < end && Date.now() - start < 800) {
+        if (idx < end && Date.now() - start < 800 - (level - 1) * 10) {
           requestAnimationFrame(obstacleLoop);
         } else if (idx < end - 1) {
           idx++;
@@ -129,12 +130,6 @@ export class Board {
       };
       loop();
     });
-  };
-
-  drawGameResult = (result) => {
-    this.canvas.clear();
-    this.canvas.drawCanvas("white");
-    this.resultCat[result][0].draw();
   };
 
   deleteItem = () => {

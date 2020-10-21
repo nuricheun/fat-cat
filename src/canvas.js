@@ -70,6 +70,13 @@ export class Canvas {
     this.ctx.fillText(`LIFE ${tries}`, this.canvas.width / 2 + 120, 50);
   };
 
+  drawCurrentLevel = (level, color = "#fff") => {
+    this.ctx.fillStyle = color;
+    this.ctx.font = "28px Lalezar";
+    this.ctx.textAlign = "center";
+    this.ctx.fillText(`LEVEL ${level}`, this.canvas.width / 2 - 120, 50);
+  };
+
   drawMissText = (missLeft, color = "#fff") => {
     this.ctx.fillStyle = color;
     this.ctx.font = "30px Lalezar";
@@ -79,33 +86,4 @@ export class Canvas {
     this.ctx.fillText(`* ${missLeft} Left*`, this.canvas.width / 2, 110);
     this.ctx.fillText(`YOU CAN EAT`, this.canvas.width / 2, 150);
   };
-
-  // drawPlants(propList) {
-  //   // while ((canvas.height - 2 * wall.width) / wall.width >= j) {
-  //   let idx = j % propList.length;
-  //   ctx.drawImage(
-  //     propList[idx].plantImage,
-  //     0,
-  //     0,
-  //     propList[idx].width,
-  //     propList[idx].height,
-  //     0,
-  //     propList[idx].height * j,
-  //     propList[idx].width * 0.7,
-  //     propList[idx].height
-  //   );
-  //   ctx.drawImage(
-  //     propList[idx].plantImage,
-  //     0,
-  //     0,
-  //     propList[idx].width,
-  //     propList[idx].height,
-  //     canvas.width - propList[idx].width,
-  //     propList[idx].height * j,
-  //     propList[idx].width * 0.7,
-  //     propList[idx].height
-  //   );
-  //   j++;
-  //   // }
-  // }
 }
