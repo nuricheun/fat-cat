@@ -24,8 +24,6 @@
     "webpack-cli": "^3.3.12"
   },
   "scripts": {
-    "dev": "webpack --watch --mode=development",
-    "build": "webpack -p",
-    "deploy": "gh-pages -d dist"
+    "dev": "webpack --watch --mode=development"
   }
 }
