@@ -22,7 +22,7 @@ export class Board {
   spacePressed = false;
 
   cat;
-  background = new Prop(0, 0, "./image/cat/pantry.png", 0, 0);
+  background = new Prop(0, 0, "./src/image/cat/pantry.png", 0, 0);
 
   resultCat = generateResultProps();
   foods = {};
@@ -38,7 +38,7 @@ export class Board {
       this.cat = new Prop(
         32,
         32,
-        "./image/fatcat.png",
+        "./src/image/fatcat.png",
         63,
         335,
         this.frameX,
