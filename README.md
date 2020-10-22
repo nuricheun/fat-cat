@@ -7,4 +7,8 @@ An interactive game which tests users’ short-term memory… also there’s a c
 
 ## Technologies
 
-FATCAT is built using JavaScript, HTML Canvas, CSS
+- JavaScript
+- Webpack
+- Babel
+- HTML Canvas 
+- CSS
