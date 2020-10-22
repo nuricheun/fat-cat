@@ -16,7 +16,7 @@ export class Game {
       this.tries = 3;
       this.done.style.display = "flex";
       return;
-    } else if (this.round === 2) {
+    } else if (this.round === 6) {
       this.board.gameOver();
 
       this.level++;

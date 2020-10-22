@@ -18,8 +18,8 @@ export class IntroPage {
 
     this.main.style.display = "flex";
     this.gameStart = false;
-    this.gameover.style.backgroundImage = "url('./image/cat/lose.png')";
-    this.win.style.backgroundImage = "url('./image/cat/winner.png')";
+    this.gameover.style.backgroundImage = "url('./src/image/cat/lose.png')";
+    this.win.style.backgroundImage = "url('./src/image/cat/winner.png')";
 
     this.aboutButton.addEventListener("click", this.aboutButtonHandler);
     this.startButton.addEventListener("click", this.startButtonHandler);
